@@ -34,6 +34,7 @@ async function getItems(config, authData) {
             type: s.slot_type_name.toString(),
           };
         }),
+        tags: item.classification_nodes.map((cn) => cn.name)
       };
     });
 
