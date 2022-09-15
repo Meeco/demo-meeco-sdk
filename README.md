@@ -4,8 +4,8 @@ demo use of meeco sdk to retrieve items &amp; its decrypted slots values and tag
 
 ## Configure
 
-open `./src/index.ts` file
-update
+rename `./config.json.example` file to `./config.json.example`
+add
 
 * subscriptionKey
 * passphrase

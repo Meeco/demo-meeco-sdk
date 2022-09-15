@@ -1,10 +1,8 @@
-import { AuthData, Environment, ItemService, UserService } from "@meeco/sdk";
+import { Environment, ItemService, UserService } from "@meeco/sdk";
+import configuration from "../config.json";
+
 // configureFetch(window.fetch);
-function getConfig(
-  vaultUrl: string,
-  keystoreUrl: string,
-  subscriptionKey: string
-) {
+function getConfig(vaultUrl, keystoreUrl, subscriptionKey) {
   return new Environment({
     vault: {
       url: vaultUrl,
@@ -18,30 +16,15 @@ function getConfig(
   });
 }
 
-async function getAuthData(
-  config: Environment,
-  passphrase: string,
-  secret: string
-) {
+async function getAuthData(config, passphrase, secret) {
   return new UserService(config).getAuthData(passphrase, secret);
 }
 
-async function getItems(config: Environment, authData: AuthData) {
+async function getItems(config, authData) {
   try {
     const items = await new ItemService(config).listDecrypted(authData);
 
-    type slot = {
-      attribute: string;
-      value: string;
-      type: string;
-    };
-
-    type item = {
-      label: string;
-      slots: slot[];
-    };
-
-    const result: item[] = items.items.map((item) => {
+    const result = items.items.map((item) => {
       return {
         label: item.label,
         slots: item.slots.map((s) => {
@@ -61,13 +44,13 @@ async function getItems(config: Environment, authData: AuthData) {
 }
 
 // configure and get items
-const vaultUrl = "https://sandbox.meeco.me/vault";
-const keystoreUrl = "https://sandbox.meeco.me/keystore";
-const subscriptionKey = "--- add subscription key ---";
+const vaultUrl = configuration.vaultUrl;
+const keystoreUrl = configuration.keystoreUrl;
+const subscriptionKey = configuration.subscriptionKey;
 const config = getConfig(vaultUrl, keystoreUrl, subscriptionKey);
 
-const passphrase = "--- add passphrase --";
-const secret = "-- add secret ---";
+const passphrase = configuration.passphrase;
+const secret = configuration.secret;
 
 getAuthData(config, passphrase, secret).then((authData) => {
   getItems(config, authData).then((result) => {
