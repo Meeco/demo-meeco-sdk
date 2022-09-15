@@ -54,6 +54,12 @@ const secret = configuration.secret;
 
 getAuthData(config, passphrase, secret).then((authData) => {
   getItems(config, authData).then((result) => {
-    console.log(JSON.stringify(result, null, 2));
+    document.getElementById("items").innerText = JSON.stringify(
+      result,
+      null,
+      2
+    );
+
+    console.log(JSON.stringify(result, null, 4));
   });
 });
