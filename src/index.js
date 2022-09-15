@@ -52,14 +52,23 @@ const config = getConfig(vaultUrl, keystoreUrl, subscriptionKey);
 const passphrase = configuration.passphrase;
 const secret = configuration.secret;
 
+const IS_NODE =
+  typeof global === "object" &&
+  "[object global]" === global.toString.call(global);
+const IS_BROWSER =
+  typeof window === "object" &&
+  "[object Window]" === window.toString.call(window);
+
 getAuthData(config, passphrase, secret).then((authData) => {
   getItems(config, authData).then((result) => {
-    document.getElementById("items").innerText = JSON.stringify(
-      result,
-      null,
-      2
-    );
-
-    console.log(JSON.stringify(result, null, 4));
+    if (IS_NODE) {
+      console.log(JSON.stringify(result, null, 4));
+    } else if (IS_BROWSER) {
+      document.getElementById("items").innerText = JSON.stringify(
+        result,
+        null,
+        2
+      );
+    }
   });
 });
